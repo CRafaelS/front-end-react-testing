@@ -25,7 +25,7 @@ test('Teste se é renderizado um card com as informações de determinado pokém
     expect(typePokemon.innerHTML).toBe(type);
     expect(weightPokemon).toBeInTheDocument();
     expect(imagePokémon).toBeInTheDocument();
-    expect(imagePokémon.src).toBe(image)
+    expect(imagePokémon.src).toBe(image);
     const nextButton = screen.getByRole('button', { name: /Próximo pokémon/i });
     userEvent.click(nextButton);
   });
