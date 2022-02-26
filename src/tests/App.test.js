@@ -1,84 +1,58 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+import { screen } from '@testing-library/react';
+import renderWithRouter from '../renderWithRouter';
 import App from '../App';
 
-test('Teste se a aplicação é redirecionada para a página inicial.', () => {
-  const homeHistory = createMemoryHistory();
-  render(
-    <Router history={ homeHistory }>
-      <App />
-    </Router>,
-  );
+describe('Fazendo teste para o Componente App', () => {
+  test('Teste se a aplicação é redirecionada para a página inicial.', () => {
+    renderWithRouter(<App />);
 
-  homeHistory.push('/');
+    const homeLink = screen.getByRole('link', { name: 'Home' });
+    expect(homeLink).toBeInTheDocument();
 
-  const homeLink = screen.getByRole('link', { name: 'Home' });
-  expect(homeLink).toBeInTheDocument();
-
-  const subTitleHome = screen.getByRole('heading', {
-    name: 'Encountered pokémons',
-    level: 2,
+    const subTitleHome = screen.getByRole('heading', {
+      name: 'Encountered pokémons',
+      level: 2,
+    });
+    expect(subTitleHome).toBeInTheDocument();
   });
-  expect(subTitleHome).toBeInTheDocument();
-});
 
-test('Teste se a aplicação é redirecionada para a página de About.', () => {
-  const AboutHistory = createMemoryHistory();
+  test('Teste se a aplicação é redirecionada para a página de About.', () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/about');
 
-  render(
-    <Router history={ AboutHistory }>
-      <App />
-    </Router>,
-  );
+    const aboutLink = screen.getByRole('link', { name: 'About' });
+    expect(aboutLink).toBeInTheDocument();
 
-  AboutHistory.push('/about');
-
-  const aboutLink = screen.getByRole('link', { name: 'About' });
-  expect(aboutLink).toBeInTheDocument();
-
-  const subTitleAbout = screen.getByRole('heading', {
-    name: 'About Pokédex',
-    level: 2,
+    const subTitleAbout = screen.getByRole('heading', {
+      name: 'About Pokédex',
+      level: 2,
+    });
+    expect(subTitleAbout).toBeInTheDocument();
   });
-  expect(subTitleAbout).toBeInTheDocument();
-});
 
-test('Teste se é redirecionada para a página de Pokémons Favoritados.', () => {
-  const favoritesHistory = createMemoryHistory();
+  test('Teste se é redirecionada para a página de Pokémons Favoritados.', () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/favorites');
 
-  render(
-    <Router history={ favoritesHistory }>
-      <App />
-    </Router>,
-  );
+    const homeLink = screen.getByRole('link', { name: /Favorite pokémons/i });
+    expect(homeLink).toBeInTheDocument();
 
-  favoritesHistory.push('/favorites');
-  const homeLink = screen.getByRole('link', { name: /Favorite pokémons/i });
-  expect(homeLink).toBeInTheDocument();
-
-  const subTitleHome = screen.getByRole('heading', {
-    name: 'Favorite pokémons',
-    level: 2,
+    const subTitleHome = screen.getByRole('heading', {
+      name: 'Favorite pokémons',
+      level: 2,
+    });
+    expect(subTitleHome).toBeInTheDocument();
   });
-  expect(subTitleHome).toBeInTheDocument();
-});
 
-test('Teste se a aplicação é redirecionada para a página Not Found.', () => {
-  const notFoundHistory = createMemoryHistory();
+  test('Teste se a aplicação é redirecionada para a página Not Found.', () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/test-notFound-page');
 
-  render(
-    <Router history={ notFoundHistory }>
-      <App />
-    </Router>,
-  );
-
-  notFoundHistory.push('/test-notFound-page');
-
-  const notFoundSubTitle = screen.getByRole('heading', {
-    name: /Page requested not found/i,
-    level: 2,
+    const notFoundSubTitle = screen.getByRole('heading', {
+      name: /Page requested not found/i,
+      level: 2,
+    });
+    expect(notFoundSubTitle).toBeInTheDocument();
   });
-  expect(notFoundSubTitle).toBeInTheDocument();
 });
